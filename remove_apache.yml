@@ -1,0 +1,24 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index
+    dnf:
+      update_cache: yes
+
+  - name: Install httpd package
+    dnf:
+      name: httpd
+  - name: httpd service enabled
+    ansible.builtin.service:
+      name: httpd
+      enabled: true
+      state: started
+  - name: open firewall
+    ansible.posix.firewalld:
+      service: http
+      state: enabled
+      immediate: true
+      permanent: true
